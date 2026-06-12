@@ -1,0 +1,30 @@
+
+Before installing:
+
+Create S3 bucket.
+Create IAM Role with policies: AmazonS3FullAccess (or least-privilege), AmazonEC2FullAccess (for snapshots), and trust relationship for EKS Pod Identity.
+Attach the role to Velero's ServiceAccount via Pod Identity Association.
+
+
+helm repo add vmware-tanzu https://vmware-tanzu.github.io/helm-charts
+helm repo update
+
+helm install velero vmware-tanzu/velero \
+  --namespace velero \
+  --create-namespace \
+  --values velero-values.yaml
+
+
+## Do this after installing Velero with this values.yaml to set up Pod Identity:
+
+aws eks create-pod-identity-association \
+  --cluster-name <your-cluster-name> \
+  --namespace velero \
+  --service-account velero \
+  --role-arn arn:aws:iam::YOUR_ACCOUNT:role/velero-role
+
+
+After install:
+
+Create a VolumeSnapshotClass for EBS CSI with label velero.io/csi-volumesnapshot-class: "true".
+Test a backup: velero backup create test-backup --include-namespaces default --wait

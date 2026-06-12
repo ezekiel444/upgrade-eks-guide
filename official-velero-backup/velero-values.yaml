@@ -1,0 +1,42 @@
+# velero-values.yaml
+
+image:
+  repository: velero/velero
+  tag: v1.18.1        # or newer stable version
+
+configuration:
+  backupStorageLocation:
+    - name: default
+      provider: aws
+      bucket: culligan-eks-dev-velero-backups # Change to your S3 bucket name
+      config:
+        region: eu-west-3
+  volumeSnapshotLocation:
+    - name: default
+      provider: aws
+      config:
+        region: eu-west-3
+  features: EnableCSI
+
+credentials:
+  useSecret: false     # Important for Pod Identity
+
+serviceAccount:
+  server:
+    create: true
+    name: velero-server
+    # ← DO NOT put eks.amazonaws.com/role-arn here when using Pod Identity
+
+initContainers:
+  - name: velero-plugin-for-aws
+    image: velero/velero-plugin-for-aws:v1.14.1  # Match Velero version
+    volumeMounts:
+      - mountPath: /target
+        name: plugins
+
+metrics:
+  enabled: true
+
+deployNodeAgent: true
+nodeAgent:
+  podVolumePath: /var/lib/kubelet/pods

@@ -46,3 +46,13 @@ velero backup get
 # test restore
 
 velero restore create --from-backup full-backup
+
+error addons 
+
+Metric server (ConfigurationConflict)
+
+aws eks update-addon \
+  --cluster-name <cluster> \
+  --addon-name metrics-server \
+  --addon-version v0.8.0-eksbuild.1 \
+  --resolve-conflicts OVERWRITE

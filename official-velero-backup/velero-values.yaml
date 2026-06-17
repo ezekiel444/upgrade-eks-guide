@@ -8,7 +8,7 @@ configuration:
   backupStorageLocation:
     - name: default
       provider: aws
-      bucket: culligan-eks-dev-velero-backups # Change to your S3 bucket name
+      bucket: culligan-eks-prod-velero-backups # Change to your S3 bucket name
       config:
         region: eu-west-3
   volumeSnapshotLocation:

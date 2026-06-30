@@ -26,7 +26,7 @@ aws eks create-pod-identity-association \
   --cluster-name eml-eks \
   --namespace velero \
   --service-account velero-server \
-  --role-arn arn:aws:iam::858112817679:role/VeleroRole-eks-dev \
+  --role-arn arn:aws:iam::072614453262:role/VeleroRole-eks-prod \
   --profile eml-eks
 
 ## VolumeSnapshotClass
